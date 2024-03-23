@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     'django_elasticsearch_dsl',
     "users",
-    "tests"
+    "tests",
     "rest_framework",
     "rest_framework_simplejwt",
 ]
