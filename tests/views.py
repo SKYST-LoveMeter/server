@@ -40,7 +40,7 @@ class AnalysisAPIView(APIView):
         test = Test.objects.get(id=test_id)
 
         highest_prediction = test.loves.all().order_by('-prediction').first()
-        highest_value = test.loves.all().order_by('-value').first()
+        highest_value = test.loves.all().order_by('-result').first()
 
         difference_list = []
         love_id_list = []
@@ -57,8 +57,8 @@ class AnalysisAPIView(APIView):
         min_value = min(difference_list)
         min_index = difference_list.index(min_value)
 
-        over_value = love.objects.get(id = love_id_list[max_index]).name.name
-        under_value = love.objects.get(id = love_id_list[min_index]).name.name
+        over_value = Love.objects.get(id = love_id_list[max_index]).name
+        under_value = Love.objects.get(id = love_id_list[min_index]).name
 
         # recommendation = get_completion(test_id, under_value)        
         
@@ -106,15 +106,23 @@ class TestResultAPIView(APIView):
         
              
         serializer = LoveSerializer(made_test.loves.all(), many=True)
-        context = [
+        context = { 
+            "before" : [
                 {"name": LoveCategory.objects.get(id=item['name']).name, 
-                "result_percentage": item['result'],
-                "prediction_percentage": item['prediction'],
+                "percentage": item['prediction'],
                 "love_id" : item['id']
                 }
                 for item in serializer.data 
-            ]
-
+            ],  
+            "after" :         
+            [
+                {"name": LoveCategory.objects.get(id=item['name']).name, 
+                "percentage": item['result'],
+                "love_id" : item['id']
+                }
+                for item in serializer.data 
+            ]  
+        }
         return Response(context)    
 
 class TestResultViewAPIView(APIView):
