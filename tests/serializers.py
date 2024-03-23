@@ -20,9 +20,7 @@ class LoveCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = LoveCategory
         fields = '__all__'
-    # def to_representation(self, instance):
-    #     rep = super(LoveCategorySerializer, self).to_representation(instance)
-    #     return {rep['id']: rep['name']}
+
 
 
 

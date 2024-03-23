@@ -5,5 +5,5 @@ app_name = "tests"
 
 urlpatterns = [
     path("", views.start_test, name="start_test"), 
-    path("<int:test_id>/test_result", views.test_result, name="test_result"), 
+    path("<int:test_id>/result", views.test_result, name="test_result"), 
 ] 
