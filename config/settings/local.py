@@ -19,3 +19,9 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+
+OPEN_API_KEY = env("OPEN_API_KEY")
+
+
+    

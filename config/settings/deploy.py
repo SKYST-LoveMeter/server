@@ -23,3 +23,8 @@ DATABASES = {
         "PORT": "5432",
     }
 }
+
+
+OPEN_API_KEY = read_secret("OPEN_API_KEY")
+
+
