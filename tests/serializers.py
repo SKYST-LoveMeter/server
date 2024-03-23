@@ -16,7 +16,7 @@ class LoveSerializer(serializers.ModelSerializer):
         model = User
         fields = ['name', 'prediction', 'result']
 
-class FavoriteSerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
