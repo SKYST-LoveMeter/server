@@ -33,26 +33,25 @@ class SignUpAPIView(APIView):
 # 로그인
 class LoginAPIView(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request):
-        # 로그인
-        def post(self, request):
-            # 유저 인증
-            user = authenticate(
-                username=request.data.get("username"), password=request.data.get("password")
+        # 유저 인증
+        user = authenticate(
+            username=request.data.get("username"), password=request.data.get("password")
+        )
+        # 이미 회원가입 된 유저일 때
+        if user is not None:
+            # jwt 토큰 접근
+            token = TokenObtainPairSerializer.get_token(user)
+            refresh_token = str(token)
+            access_token = str(token.access_token)
+            res = Response(
+                {
+                    "access": access_token,
+                    "refresh": refresh_token
+                },
+                status=status.HTTP_200_OK,
             )
-            # 이미 회원가입 된 유저일 때
-            if user is not None:
-                # jwt 토큰 접근
-                token = TokenObtainPairSerializer.get_token(user)
-                refresh_token = str(token)
-                access_token = str(token.access_token)
-                res = Response(
-                    {
-                        "access": access_token,
-                        "refresh": refresh_token
-                    },
-                    status=status.HTTP_200_OK,
-                )
-                return res
-            else:
-                return Response(status=status.HTTP_401_UNAUTHORIZED)
+            return res
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
