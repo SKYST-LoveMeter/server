@@ -32,9 +32,9 @@ class UserManager(BaseUserManager):
         return superuser
 
 class User(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=20, unique=True)
-    password = models.CharField(max_length=20)
-    real_name = models.CharField(max_length=20)
+    username = models.CharField(unique=True)
+    password = models.CharField()
+    real_name = models.CharField()
 
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
