@@ -18,6 +18,6 @@ class Love(models.Model) :
   result = models.PositiveIntegerField(default=0)
   efforts = models.ManyToManyField(Effort)
 
-class Category(models.Model) : 
+class LoveCategory(models.Model) :
   name = models.CharField(max_length=1000, null= False)
-  user = models.ForeignKey(User, on_delete=models.CASCADE)
+
