@@ -23,6 +23,7 @@ services:
       - POSTGRES_DB
       - POSTGRES_USER
       - POSTGRES_PASSWORD
+      - OPEN_API_KEY
 
   postgresdb:
     image: postgres:13.11
@@ -68,4 +69,6 @@ secrets:
   POSTGRES_USER:
     external: true
   POSTGRES_PASSWORD:
+    external: true
+  OPEN_API_KEY: true
     external: true
