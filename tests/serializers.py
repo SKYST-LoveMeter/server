@@ -5,7 +5,7 @@ class TestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Test
         fields = ['created_at', 'updated_at', 'user', 'id']
-
+    
 class EffortSerializer(serializers.ModelSerializer):
     class Meta:
         model = Effort
@@ -16,10 +16,13 @@ class LoveSerializer(serializers.ModelSerializer):
         model = Love
         fields = ['name', 'prediction', 'result']
 
-class CategorySerializer(serializers.ModelSerializer):
+class LoveCategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Category
+        model = LoveCategory
         fields = '__all__'
+    def to_representation(self, instance):
+        rep = super(LoveCategorySerializer, self).to_representation(instance)
+        return {rep['id']: rep['name']}
 
 
 
