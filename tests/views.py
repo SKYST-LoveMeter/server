@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import *
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
 
 @api_view(['Post'])
 def start_test (request):
@@ -53,5 +55,11 @@ def test_result (request, test_id):
 
     return Response(love_result)    
 
+class LoveCategory(APIView):
+    permission_classes = [AllowAny]
 
-
+    def post(self, request):
+        serializer = LoveCategorySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
