@@ -13,7 +13,7 @@ class Effort(models.Model) :
   # test = models.ForeignKey(Test, on_delete=models.CASCADE)
 
 class Love(models.Model) : 
-  name = models.ForeignKey('category', on_delete=models.CASCADE)
+  name = models.ForeignKey('Category', on_delete=models.CASCADE)
   prediction = models.PositiveIntegerField(default=0)
   result = models.PositiveIntegerField(default=0)
   efforts = models.ManyToManyField(Effort)
