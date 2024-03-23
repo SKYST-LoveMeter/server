@@ -6,5 +6,7 @@ app_name = "tests"
 urlpatterns = [
     path("", views.StartTestAPIView.as_view(), name="start_test"), 
     path("<int:test_id>/result", views.TestResultAPIView.as_view(), name="test_result"),
-    path("love_category/", views.LoveCategoryCreate.as_view())
+    path("love_category/", views.LoveCategoryCreate.as_view()),
+    path("calendar/", views.CalendarAPIView.as_view(), name="calendar")
+
 ] 
