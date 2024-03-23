@@ -3,22 +3,22 @@ from .models import *
 
 class TestSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = Test
         fields = ['created_at', 'updated_at', 'user', 'id']
 
 class EffortSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = Effort
         fields = '__all__'
 
 class LoveSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = Love
         fields = ['name', 'prediction', 'result']
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = Category
         fields = '__all__'
 
 
