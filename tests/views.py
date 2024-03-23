@@ -57,16 +57,17 @@ class AnalysisAPIView(APIView):
         min_value = min(difference_list)
         min_index = difference_list.index(min_value)
 
-        over_value = test.objects.get(id = love_id_list[max_index]) 
-        under_value = test.objects.get(id = love_id_list[min_index])
-                
-        get_completion(test_id, under_value)        
+        over_value = love.objects.get(id = love_id_list[max_index]).name.name
+        under_value = love.objects.get(id = love_id_list[min_index]).name.name
+
+        recommendation = get_completion(test_id, under_value)        
         
         context = {
             "highest_prediction" : highest_prediction,
             "highest_value" : highest_value,
             "over_value" : over_value,
             "under_value" : under_value,
+            "recommendation" : recommendation
         }
         return Response(context) 
 
