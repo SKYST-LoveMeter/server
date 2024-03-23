@@ -10,10 +10,10 @@ from .models import *
 class StartTestAPIView(APIView):
     def get (self,request):
         category= LoveCategory.objects.get(id=1)
-        print(category)
-        Love.objects.create(name=category)
+        # print(category)
+        # Love.objects.create(name=category)
         queryset = LoveCategory.objects.all()
-        print(queryset)
+        # print(queryset)
         serializer = LoveCategorySerializer(queryset, many=True)
         data = {item['id']: item['name'] for item in serializer.data}
         test = Test.objects.create(user= request.user)
@@ -27,7 +27,7 @@ class StartTestAPIView(APIView):
 class TestResultAPIView(APIView):
     def post (self, request, test_id):
         received_data = request.data
-        print(request.data)
+        # print(request.data)
         loves = received_data['love']
         efforts = received_data['effort']
 
@@ -56,14 +56,31 @@ class TestResultAPIView(APIView):
                 tmp = tmp + effort.value
             love.result = tmp/total * 100
             love.save()
-
+        
+             
         serializer = LoveSerializer(made_test.loves.all(), many=True)
         context = [
-                {"name": LoveCategory.objects.get(id=item['name']).name, "percentage": item['result']}
-                for item in serializer.data
+                {"name": LoveCategory.objects.get(id=item['name']).name, 
+                "percentage": item['result']
+                }
+                for item in serializer.data 
             ]
 
         return Response(context)    
+
+class TestResultViewAPIView(APIView):
+    def post (self, request, test_id):
+        test = Test.objects.get(id= test_id)
+        serializer = LoveSerializer(test.loves.all(), many=True)
+        
+        context = [
+                {"name": LoveCategory.objects.get(id=item['name']).name, 
+                "percentage": item['result']
+                }
+                for item in serializer.data 
+            ]  
+        
+        return Response(context)             
 
 class LoveCategoryCreate(APIView):
     permission_classes = [AllowAny]
