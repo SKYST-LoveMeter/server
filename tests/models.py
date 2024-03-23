@@ -13,12 +13,11 @@ class Effort(models.Model) :
   # test = models.ForeignKey(Test, on_delete=models.CASCADE)
 
 class Love(models.Model) : 
-  name = models.CharField(max_length=1000, null= False)
+  name = models.ForeignKey('Category', on_delete=models.CASCADE)
   prediction = models.PositiveIntegerField(default=0)
   result = models.PositiveIntegerField(default=0)
   efforts = models.ManyToManyField(Effort)
 
-class Favorite(models.Model) : 
+class Category(models.Model) : 
   name = models.CharField(max_length=1000, null= False)
   user = models.ForeignKey(User, on_delete=models.CASCADE)
-  #test
