@@ -4,15 +4,15 @@ from rest_framework import status
 from .serializers import *
 from rest_framework.decorators import api_view
 
-@api_view(['Post'])
+@api_view(['Get'])
 def start_test (request):
     queryset = LoveCategory.objects.all()
     serializer = LoveCategorySerializer(queryset, many=True)
     data = {item['id']: item['name'] for item in serializer.data}
-    # test = Test.objects.create(user= request.user)
+    test = Test.objects.create(user= request.user)
     context = {
         "category" : data,
-        # "test_id" : test.id
+        "test_id" : test.id
     }
     return Response(context)
    
