@@ -16,7 +16,7 @@ class Love(models.Model) :
   name = models.ForeignKey('LoveCategory', on_delete=models.CASCADE)
   prediction = models.PositiveIntegerField(default=0)
   result = models.PositiveIntegerField(default=0)
-  efforts = models.ManyToManyField(Effort)
+  efforts = models.ManyToManyField(Effort, null = True)
 
 class LoveCategory(models.Model) :
   name = models.CharField(max_length=1000, null= False)
