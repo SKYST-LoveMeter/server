@@ -124,7 +124,8 @@ class TestResultViewAPIView(APIView):
         
         context = [
                 {"name": LoveCategory.objects.get(id=item['name']).name, 
-                "percentage": item['result'],
+                "result_percentage": item['result'],
+                "prediction_percentage": item['prediction'],
                 "love_id" : item['id']
                 }
                 for item in serializer.data 
