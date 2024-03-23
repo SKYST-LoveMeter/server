@@ -4,12 +4,54 @@ from rest_framework import status
 from .serializers import *
 from rest_framework.decorators import api_view
 
-@api_view(['GET'])
+@api_view(['Post'])
 def start_test (request):
-    categories = LoveCategory.objects.all()
-    serialized_categories = LoveCategorySerializer(categories, many= True)
+    queryset = LoveCategory.objects.all()
+    serializer = LoveCategorySerializer(queryset, many=True)
+    data = {item['id']: item['name'] for item in serializer.data}
+    # test = Test.objects.create(user= request.user)
     context = {
-        "categories" : serialized_categories    
+        "category" : data,
+        # "test_id" : test.id
     }
-    return Response(context)    
+    return Response(context)
+   
+
+@api_view(['Post'])
+def test_result (request, test_id):
+    received_data = request.data
+    loves = received_data['love']
+    efforts = received_data['effort']
+
+    made_test = Test.objects.get(id= test_id)
+
+    love_id_list = []
+    for love in loves :
+        category = LoveCategory.objects.get(id=love['id'])
+        made_love = Love.objects.create(name = category, prediction = love['percentage'])
+        made_test.loves.add(made_love)
+        love_id_list.append(made_love.id)
+   
+    total = 0
+    for effort in efforts :
+        made_effort = Effort.objects.create(description= effort['description'], test = made_test, value=effort['value']) 
+        for lover in effort['lovers'] : 
+            love = Love.objects.get(id = love_id_list[lover-1])
+            love.efforts.add(made_effort)
+        total = total + effort['value'] * len(effort['lovers'])
+
+    for love_id in love_id_list :
+        love = Love.objects.get(id = love_id)
+        tmp = 0 
+        for effort in love.efforts.all() :
+            tmp = tmp + effort.value
+        love.result = tmp/total * 100
+        love.save()
+
+    serializer = LoveSerializer(made_test.loves.all(), many=True)
+    love_result = {LoveCategory.objects.get(id=item['name']).name: item['result'] for item in serializer.data}
+
+    return Response(love_result)    
+
+
 
