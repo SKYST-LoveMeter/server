@@ -52,11 +52,36 @@ def test_result (request, test_id):
 
     serializer = LoveSerializer(made_test.loves.all(), many=True)
     context = [
+        # made_test의 모든 loves에 대해서, 각각의 name과 result를 가져와서 저장.
             {"name": LoveCategory.objects.get(id=item['name']).name, "percentage": item['result']}
             for item in serializer.data
         ]
 
     return Response(context)    
+
+
+@api_view(['Get'])
+def get_test_result (request, test_id):
+        queryset = Test.objects.get(id=test_id)
+
+        if not queryset:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+
+        love_list = queryset.loves.all()
+        serializer = LoveSerializer(love_list, many=True)
+
+        # test가 가지고 있는 loves에 대해서, 각각의 name과 result를 가져와서 저장.
+        myList = []    
+
+        for item in serializer.data:
+            myList.append(
+                {"name": LoveCategory.objects.get(id=item['name']).name, "percentage": item['result']}
+            )
+
+        return Response(myList)
+
+
 
 class LoveCategory(APIView):
     permission_classes = [AllowAny]
@@ -66,3 +91,22 @@ class LoveCategory(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+class CalendarAPIView(APIView):
+    def get(self, request):
+        user = request.user
+        queryset = Test.objects.filter(user=user)
+        serializer = TestSerializer(queryset, many=True)
+
+        myList = []
+
+        for item in serializer.data:
+            myList.append({
+                "id": item['id'],
+                "created_at": item['created_at'],
+                "updated_at": item['updated_at'],
+            })
+        
+        return Response(myList)
+    
+
