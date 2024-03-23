@@ -60,14 +60,14 @@ class AnalysisAPIView(APIView):
         over_value = Love.objects.get(id = love_id_list[max_index]).name.name
         under_value = Love.objects.get(id = love_id_list[min_index]).name.name
 
-        # recommendation = get_completion(test_id, under_value)        
+        recommendation = get_completion(test_id, under_value)
         
         context = {
             "highest_prediction" : highest_prediction,
             "highest_value" : highest_value,
             "over_value" : over_value,
             "under_value" : under_value,
-            # "recommendation" : recommendation
+            "recommendation" : recommendation
         }
         return Response(context) 
 
@@ -177,23 +177,29 @@ class LoveCategoryCreate(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 
-# import openai
-# from config.settings.deploy import OPEN_API_KEY
-# key = OPEN_API_KEY
-# openai.api_key=key
-# def get_completion(test_id, under_value):
-#     messages = [
-#         {"role": "system", "content": "나는 지금 서비스를 기획하고 있어. 이 서비스는 사랑하는 것들의 순위를 선정하고, 실제 그것들에 주는 애정을 비교하는 서비스야. 비교를 통해 사용자에게 적합한 조언을 해줘야돼."}
-#     ]
-#     # 많은 시간을 쏟는 일들을 나열
-#     test = Test.objects.get(id=test_id)
-#     efforts = list(Effort.objects.filter(test=test, value=3))
-#     context = ", ".join(str(e) for e in efforts)
-#     messages.append({"role": "assistant", "content": f"{context}를 자주하는 사람"})
-#     messages.append({"role": "user", "content": f"{under_value}게 애정을 더 쏟기 위해서 할만한 행동을 한 문장으로 추천해줘"})
-#     query = openai.ChatCompletion.create(
-#         model="gpt-3.5-turbo",
-#         messages=messages
-#     )
-#     response = query.choices[0].message["content"]
-#     return response
+def read_secret(secret_name):
+    file = open("/run/secrets/" + secret_name)
+    secret = file.read()
+    secret = secret.rstrip().lstrip()
+    file.close()
+    return secret
+
+import openai
+OPEN_API_KEY = read_secret("OPEN_API_KEY")
+openai.api_key=OPEN_API_KEY
+def get_completion(test_id, under_value):
+    messages = [
+        {"role": "system", "content": "나는 지금 서비스를 기획하고 있어. 이 서비스는 사랑하는 것들의 순위를 선정하고, 실제 그것들에 주는 애정을 비교하는 서비스야. 비교를 통해 사용자에게 적합한 조언을 해줘야돼."}
+    ]
+    # 많은 시간을 쏟는 일들을 나열
+    test = Test.objects.get(id=test_id)
+    efforts = list(Effort.objects.filter(test=test, value=3))
+    context = ", ".join(str(e) for e in efforts)
+    messages.append({"role": "assistant", "content": f"{context}를 자주하는 사람"})
+    messages.append({"role": "user", "content": f"{under_value}게 애정을 더 쏟기 위해서 할만한 행동을 한 문장으로 추천해줘"})
+    query = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=messages
+    )
+    response = query.choices[0].message["content"]
+    return response
