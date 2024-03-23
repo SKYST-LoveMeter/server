@@ -13,7 +13,7 @@ def start_test (request):
     data = {item['id']: item['name'] for item in serializer.data}
     #test = Test.objects.create(user= request.user)
     context = {
-        "category" : data,
+        "category" : data
         #"test_id" : test.id
     }
     return Response(context)
