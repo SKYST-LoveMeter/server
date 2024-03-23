@@ -55,3 +55,15 @@ class LoginAPIView(APIView):
             return res
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
+        
+    
+class UserInfoAPIView(APIView):
+    def get(self, request):
+        user = request.user
+
+        return Response(
+            {
+                "username": user.username,
+            },
+            status=status.HTTP_200_OK,
+        )
