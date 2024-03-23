@@ -1,0 +1,57 @@
+version: "3.7"
+services:
+  django_container:
+    image: love_meter:v1.0.0
+    networks:
+      - network
+    secrets:
+      - DJANGO_SECRET_KEY
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+
+  postgresdb:
+    image: postgres:13.11
+    networks:
+      - network
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_database:/var/lib/postgresql/data
+    secrets:
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+    environment:
+      - POSTGRES_DB_FILE=/run/secrets/POSTGRES_DB
+      - POSTGRES_USER_FILE=/run/secrets/POSTGRES_USER
+      - POSTGRES_PASSWORD_FILE=/run/secrets/POSTGRES_PASSWORD
+
+  elasticsearch:
+    image: elasticsearch:8.12.0
+    ports:
+      - 9200:9200
+    networks:
+      - network
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xmx512m -Xms512m
+    depends_on:
+      - django_container
+
+networks:
+  network:
+
+
+volumes:
+  postgres_database:
+
+secrets:
+  DJANGO_SECRET_KEY:
+    external: true
+  POSTGRES_DB:
+    external: true
+  POSTGRES_USER:
+    external: true
+  POSTGRES_PASSWORD:
+    external: true
