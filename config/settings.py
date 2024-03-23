@@ -172,3 +172,4 @@ SIMPLE_JWT = {
 }
 
 # AUTH_USER_MODEL = "users.User"
+#테스트
