@@ -82,7 +82,25 @@ class TestResultViewAPIView(APIView):
                 for item in serializer.data 
             ]  
         
-        return Response(context)             
+        return Response(context) 
+
+class TestResultDetailAPIView(APIView):
+    def post (self, request, test_id, love_id):
+        test = Test.objects.get(id= test_id)
+        love = Love.objects.get(id=love_id)
+        
+        efforts = love.efforts.all().filter(test=test) 
+        serialized_efforts = EffortSerializer(efforts, many=True).data
+
+        all_loves = test.loves.all().filter(id__lt=test_id)
+        serialized_loves = LoveSerializer(all_loves, many=True).data
+
+        context = {
+            "efforts": [effort['description'] for effort in serialized_efforts],
+            "previous_loves": [love['result'] for love in serialized_loves]
+        }
+        
+        return Response(context)            
 
 class LoveCategoryCreate(APIView):
     permission_classes = [AllowAny]
