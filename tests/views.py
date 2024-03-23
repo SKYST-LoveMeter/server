@@ -34,7 +34,7 @@ def test_result (request, test_id):
    
     total = 0
     for effort in efforts :
-        made_effort = Effort.objects.create(description= effort['description'], test = made_test) 
+        made_effort = Effort.objects.create(description= effort['description'], test = made_test, value=effort['value']) 
         for lover in effort['lovers'] : 
             love = Love.objects.get(id = love_id_list[lover-1])
             love.efforts.add(made_effort)
@@ -45,15 +45,13 @@ def test_result (request, test_id):
         tmp = 0 
         for effort in love.efforts.all() :
             tmp = tmp + effort.value
-        love.result = tmp/total 
+        love.result = tmp/total * 100
         love.save()
 
-       
-    context = {
-       "loves" : loves,
-       "efforts" :efforts
-    }
-    return Response(context)    
+    serializer = LoveSerializer(made_test.loves.all(), many=True)
+    love_result = {LoveCategory.objects.get(id=item['name']).name: item['result'] for item in serializer.data}
+
+    return Response(love_result)    
 
 
 
