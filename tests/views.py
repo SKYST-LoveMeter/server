@@ -22,7 +22,18 @@ class StartTestAPIView(APIView):
             "test_id" : test.id
         }
         return Response(context)
-   
+
+class CalendarAPIView(APIView):
+    def post (self, request):
+        tests= Test.objects.filter(user = request.user)
+        serialized_tests =TestSerializer(tests,many=True)
+        context = [
+            { "created_at" : test["created_at"],
+              "test_id" : test["id"]
+        }
+            for test in serialized_tests.data
+        ]
+        return Response(context) 
 
 class TestResultAPIView(APIView):
     def post (self, request, test_id):
@@ -62,7 +73,7 @@ class TestResultAPIView(APIView):
         context = [
                 {"name": LoveCategory.objects.get(id=item['name']).name, 
                 "percentage": item['result'],
-                "love_id" : item.id
+                "love_id" : item['id']
                 }
                 for item in serializer.data 
             ]
@@ -77,7 +88,7 @@ class TestResultViewAPIView(APIView):
         context = [
                 {"name": LoveCategory.objects.get(id=item['name']).name, 
                 "percentage": item['result'],
-                "love_id" : item.id
+                "love_id" : item['id']
                 }
                 for item in serializer.data 
             ]  
@@ -88,7 +99,7 @@ class TestResultDetailAPIView(APIView):
     def post (self, request, test_id, love_id):
         test = Test.objects.get(id= test_id)
         love = Love.objects.get(id=love_id)
-        
+
         efforts = love.efforts.all().filter(test=test) 
         serialized_efforts = EffortSerializer(efforts, many=True).data
 

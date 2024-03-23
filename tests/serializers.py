@@ -14,7 +14,7 @@ class EffortSerializer(serializers.ModelSerializer):
 class LoveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Love
-        fields = ['name', 'prediction', 'result']
+        fields = ['name', 'prediction', 'result','id']
 
 class LoveCategorySerializer(serializers.ModelSerializer):
     class Meta:
