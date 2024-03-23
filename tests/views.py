@@ -6,15 +6,15 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 
-@api_view(['Post'])
+@api_view(['Get'])
 def start_test (request):
     queryset = LoveCategory.objects.all()
     serializer = LoveCategorySerializer(queryset, many=True)
     data = {item['id']: item['name'] for item in serializer.data}
-    # test = Test.objects.create(user= request.user)
+    test = Test.objects.create(user= request.user)
     context = {
         "category" : data,
-        # "test_id" : test.id
+        "test_id" : test.id
     }
     return Response(context)
    
@@ -51,9 +51,12 @@ def test_result (request, test_id):
         love.save()
 
     serializer = LoveSerializer(made_test.loves.all(), many=True)
-    love_result = {LoveCategory.objects.get(id=item['name']).name: item['result'] for item in serializer.data}
+    context = [
+            {"name": LoveCategory.objects.get(id=item['name']).name, "percentage": item['result']}
+            for item in serializer.data
+        ]
 
-    return Response(love_result)    
+    return Response(context)    
 
 class LoveCategory(APIView):
     permission_classes = [AllowAny]
