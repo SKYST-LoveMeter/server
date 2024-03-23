@@ -39,8 +39,8 @@ class AnalysisAPIView(APIView):
     def post (self, request,test_id):
         test = Test.objects.get(id=test_id)
 
-        highest_prediction = test.loves.all().order_by('-prediction').first()
-        highest_value = test.loves.all().order_by('-result').first()
+        highest_prediction = test.loves.all().order_by('-prediction').first().name.name
+        highest_value = test.loves.all().order_by('-result').first().name.name
 
         difference_list = []
         love_id_list = []
@@ -57,8 +57,8 @@ class AnalysisAPIView(APIView):
         min_value = min(difference_list)
         min_index = difference_list.index(min_value)
 
-        over_value = Love.objects.get(id = love_id_list[max_index]).name
-        under_value = Love.objects.get(id = love_id_list[min_index]).name
+        over_value = Love.objects.get(id = love_id_list[max_index]).name.name
+        under_value = Love.objects.get(id = love_id_list[min_index]).name.name
 
         # recommendation = get_completion(test_id, under_value)        
         
