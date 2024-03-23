@@ -1,7 +1,21 @@
 version: "3.7"
 services:
+  nginx:
+    image: nginx:1.19.5
+    ports:
+      - mode: host
+        protocol: tcp
+        target: 80
+        published: 80
+    networks:
+      - network
+    volumes:
+      - /home/server/nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - django_container
+
   django_container:
-    build: ./
+    image: love_meter:v1.0.0
     networks:
       - network
     secrets:
@@ -38,8 +52,6 @@ services:
       - ES_JAVA_OPTS=-Xmx512m -Xms512m
       - xpack.security.enabled=false
       - xpack.security.http.ssl.enabled=false
-    depends_on:
-      - django_container
 
 networks:
   network:
