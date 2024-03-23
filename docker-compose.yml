@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   django_container:
-    image: love_meter:v1.0.0
+    build: ./
     networks:
       - network
     secrets:

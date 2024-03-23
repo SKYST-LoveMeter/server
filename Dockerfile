@@ -1,4 +1,4 @@
-FROM python:3.11
+FROM python:3.12
 
 RUN echo "Django Project deploy 2024.02.13 00:32"
 
