@@ -22,7 +22,7 @@ class StartTestAPIView(APIView):
    
 
 class TestResultAPIView(APIView):
-    def post (request, test_id):
+    def post (self, request, test_id):
         received_data = request.data
         loves = received_data['love']
         efforts = received_data['effort']
