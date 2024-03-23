@@ -149,7 +149,7 @@ class TestResultDetailAPIView(APIView):
         efforts = love.efforts.all().filter(test=test) 
         serialized_efforts = EffortSerializer(efforts, many=True).data
 
-        all_loves = test.loves.all().filter(id__lt=test_id)
+        all_loves = test.loves.all().filter(id__lt=love_id)
         serialized_loves = LoveSerializer(all_loves, many=True).data
 
         context = {
