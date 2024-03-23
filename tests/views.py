@@ -4,14 +4,13 @@ from rest_framework import status
 from .serializers import *
 from rest_framework.decorators import api_view
 
-@api_view(['POST'])
+@api_view(['Get'])
 def start_test (request):
-    categories = LoveCategory.objects.all()
-    serialized_categories = LoveCategorySerializer(categories, many= True)
-    context = {
-        "categories" : serialized_categories    
-    }
-    return Response(context)    
+    queryset = LoveCategory.objects.all()
+    serializer = LoveCategorySerializer(queryset, many=True)
+    data = {item['id']: item['name'] for item in serializer.data}
+    return Response(data)
+   
 
 @api_view(['POST'])
 def test_result (request, test_id):
@@ -19,17 +18,14 @@ def test_result (request, test_id):
     loves = received_data['love']
     efforts = received_data['effort']
 
-    for effort in efforts :
-        Effort.objects.create(description= effort['description'], test_id = test_id) 
-    
     for love in loves :
-        made_love = Love.objects.create(name = love['name'], prediction = love['percentage'])
+        Love.objects.create(name = love['name'], prediction = love['percentage'])
 
-        made_love.efforts.add(related_effort) 
-
-
-
-
+    for effort in efforts :
+        made_effort = Effort.objects.create(description= effort['description'], test_id = test_id) 
+        for lover in effort['lovers'] : 
+            love = Love.objects.get(id = lover)
+            love.efforts.add(made_effort)   
     context = {
        
     }
