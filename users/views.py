@@ -63,7 +63,7 @@ class UserInfoAPIView(APIView):
 
         return Response(
             {
-                "username": user.username,
+                "username": user.real_name,
             },
             status=status.HTTP_200_OK,
         )
