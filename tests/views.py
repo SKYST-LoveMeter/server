@@ -49,9 +49,12 @@ def test_result (request, test_id):
         love.save()
 
     serializer = LoveSerializer(made_test.loves.all(), many=True)
-    love_result = {LoveCategory.objects.get(id=item['name']).name: item['result'] for item in serializer.data}
+    context = [
+            {"name": LoveCategory.objects.get(id=item['name']).name, "percentage": item['result']}
+            for item in serializer.data
+        ]
 
-    return Response(love_result)    
+    return Response(context)    
 
 
 
