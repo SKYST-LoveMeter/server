@@ -35,6 +35,11 @@ class CalendarAPIView(APIView):
         ]
         return Response(context) 
 
+class AnalysisAPIView(APIView):
+    def post (self, request,test_id):
+
+        return Response(context) 
+
 class TestResultAPIView(APIView):
     def post (self, request, test_id):
         received_data = request.data
