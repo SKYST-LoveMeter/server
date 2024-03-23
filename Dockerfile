@@ -6,7 +6,7 @@ WORKDIR /home/
 
 RUN git clone -b develop https://github.com/SKYST-LoveMeter/server.git
 
-WORKDIR /home/Piro20-Team3-FinalProject/
+WORKDIR /home/server/
 
 RUN pip install -r requirements.txt
 
