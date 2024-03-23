@@ -27,6 +27,7 @@ class StartTestAPIView(APIView):
 class TestResultAPIView(APIView):
     def post (self, request, test_id):
         received_data = request.data
+        print(request.data)
         loves = received_data['love']
         efforts = received_data['effort']
 
@@ -34,18 +35,17 @@ class TestResultAPIView(APIView):
 
         love_id_list = []
         for love in loves :
-            print(love)
             category = LoveCategory.objects.get(id=love['id'])
             made_love = Love.objects.create(name = category, prediction = love['percentage'])
             made_test.loves.add(made_love)
             love_id_list.append(made_love.id)
         
-        print(love_id_list)
         total = 0
         for effort in efforts :
             made_effort = Effort.objects.create(description= effort['description'], test = made_test, value=effort['value']) 
             for lover in effort['lovers'] : 
-                love = Love.objects.get(id = love_id_list[lover-1])
+                love_category = LoveCategory.objects.get(id=lover)
+                love = Love.objects.get(name=love_category, id__gte=love_id_list[0])
                 love.efforts.add(made_effort)
             total = total + effort['value'] * len(effort['lovers'])
 

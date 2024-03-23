@@ -22,6 +22,4 @@ class Love(models.Model) :
 class LoveCategory(models.Model) :
   name = models.CharField(max_length=10001, null= False)
 
-class LoveCategory2(models.Model) :
-  name = models.CharField(max_length=10001, null= False)
 
