@@ -9,6 +9,9 @@ from .models import *
 
 class StartTestAPIView(APIView):
     def get (self,request):
+        category= LoveCategory.objects.get(id=1)
+        print(category)
+        Love.objects.create(name=category)
         queryset = LoveCategory.objects.all()
         print(queryset)
         serializer = LoveCategorySerializer(queryset, many=True)
@@ -31,11 +34,13 @@ class TestResultAPIView(APIView):
 
         love_id_list = []
         for love in loves :
+            print(love)
             category = LoveCategory.objects.get(id=love['id'])
             made_love = Love.objects.create(name = category, prediction = love['percentage'])
             made_test.loves.add(made_love)
             love_id_list.append(made_love.id)
-    
+        
+        print(love_id_list)
         total = 0
         for effort in efforts :
             made_effort = Effort.objects.create(description= effort['description'], test = made_test, value=effort['value']) 
