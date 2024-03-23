@@ -21,3 +21,4 @@ class Love(models.Model) :
 class Favorite(models.Model) : 
   name = models.CharField(max_length=1000, null= False)
   user = models.ForeignKey(User, on_delete=models.CASCADE)
+  #test
