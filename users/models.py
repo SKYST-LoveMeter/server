@@ -43,3 +43,5 @@ class User(AbstractBaseUser):
 
     # 헬퍼 클래스 사용
     objects = UserManager()
+
+    USERNAME_FIELD = 'username'
