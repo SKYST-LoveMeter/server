@@ -11,10 +11,10 @@ def start_test (request):
     queryset = LoveCategory.objects.all()
     serializer = LoveCategorySerializer(queryset, many=True)
     data = {item['id']: item['name'] for item in serializer.data}
-    test = Test.objects.create(user= request.user)
+    #test = Test.objects.create(user= request.user)
     context = {
         "category" : data,
-        "test_id" : test.id
+        #"test_id" : test.id
     }
     return Response(context)
    
