@@ -117,11 +117,6 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated", # 인증된 사용자만 접근
     ),
 }
-DEBUG = True 
-    
-if DEBUG:
-    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] = []
-    REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] = []
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),
