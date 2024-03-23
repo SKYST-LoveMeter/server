@@ -10,7 +10,7 @@ class Test(models.Model) :
 
 class Effort(models.Model) :
   description = models.CharField(max_length=1000, null= False)
-  # test = models.ForeignKey(Test, on_delete=models.CASCADE)
+  test = models.ForeignKey(Test, on_delete=models.CASCADE)
 
 class Love(models.Model) : 
   name = models.ForeignKey('Category', on_delete=models.CASCADE)
